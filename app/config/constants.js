@@ -1,4 +1,4 @@
-const defaultConfig = {
+module.exports = {
   env: process.env.NODE_ENV,
   port: process.env.PORT || 5000,
   database: {
@@ -11,5 +11,3 @@ const defaultConfig = {
     timezone: '+07:00',
   },
 };
-
-export default defaultConfig;
