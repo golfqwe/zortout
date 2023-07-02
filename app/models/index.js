@@ -6,7 +6,6 @@ const dbConfig = constants.database;
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
   host: dbConfig.host,
   dialect: dbConfig.dialect,
-  operatorsAliases: false,
   dialectOptions: {
     options: {
       encrypt: true,

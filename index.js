@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { getOrder } = require('./app/controllers/order');
 
 const db = require('./app/models');
 
@@ -9,6 +10,8 @@ db.sequelize.sync()
   .catch((err) => {
     console.log(`Failed to sync db: ${err.message}`);
   });
+
+getOrder();
 
 // // drop the table if it already exists
 // db.sequelize.sync({ force: true }).then(() => {
