@@ -17,7 +17,7 @@ const instance = axios.create({
 const b2 = new cliProgress.Bar({
   barCompleteChar: '#',
   barIncompleteChar: '_',
-  format: ' |- Current Progress: {percentage}%' + ' - ' + '||{bar}||',
+  format: ' |- Current Progress fetch data: {percentage}%' + ' - ' + '||{bar}||',
   fps: 5,
   stream: process.stdout,
   barsize: 30,

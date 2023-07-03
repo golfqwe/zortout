@@ -3,17 +3,13 @@ const { getOrder } = require('./app/controllers/order');
 
 const db = require('./app/models');
 
-db.sequelize.sync()
-  .then(() => {
-    console.log('Synced db.');
-  })
-  .catch((err) => {
-    console.log(`Failed to sync db: ${err.message}`);
-  });
+try {
+  db.sequelize.sync();
+  console.log('\nConnection has been established successfully.');
+} catch (error) {
+  console.log(`Failed to sync db: ${error.message}`);
+}
 
-getOrder();
-
-// // drop the table if it already exists
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log("Drop and re-sync db.");
-// });
+setInterval(() => {
+  // getOrder();
+}, 1000 * 60 * 20); // 20 minutes
