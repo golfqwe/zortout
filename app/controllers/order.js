@@ -19,7 +19,7 @@ const b2 = new cliProgress.Bar({
 const getOrder = async () => {
   // console.log('\n');
   try {
-    const { data } = await instance.get('Order/GetOrders?limit=2');
+    const { data } = await instance.get('Order/GetOrders');
     b2.start(data.list.length, 0);
     let index = 0;
     for (const order of data.list) {
@@ -60,7 +60,7 @@ const getOrder = async () => {
     b2.stop();
     console.log('\x1b[33m Insert success fully! \x1b[0m');
   } catch (error) {
-    console.log('🚀 ~ file: order.js:9 ~ getOrder ~ error:', error);
+    console.error('🚀 ~ file: order.js:9 ~ getOrder ~ error:', error);
   }
 };
 

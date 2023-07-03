@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { getOrder } = require('./app/controllers/order');
+const { getProduct } = require('./app/controllers/product');
 
 const db = require('./app/models');
 
@@ -10,6 +11,10 @@ try {
   console.log(`Failed to sync db: ${error.message}`);
 }
 
-setInterval(() => {
-  // getOrder();
-}, 1000 * 60 * 20); // 20 minutes
+// getProduct();
+getOrder();
+
+// setInterval(() => {
+//   getProduct();
+//   getOrder();
+// }, 1000 * 60 * 20); // 20 minutes

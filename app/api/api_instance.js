@@ -1,6 +1,5 @@
 const axios = require('axios');
 require('dotenv').config();
-const cliProgress = require('cli-progress');
 
 const instance = axios.create({
   baseURL: process.env.API_HOST,
@@ -14,36 +13,25 @@ const instance = axios.create({
   },
   // .. other options
 });
-const b2 = new cliProgress.Bar({
-  barCompleteChar: '#',
-  barIncompleteChar: '_',
-  format: ' |- Current Progress fetch data: {percentage}%' + ' - ' + '||{bar}||',
-  fps: 5,
-  stream: process.stdout,
-  barsize: 30,
-});
-b2.start(100, 0);
+const loading = (function () {
+  const h = ['|', '/', '-', '\\'];
+  let i = 0;
 
-const timer = setInterval(() => {
-  // increment value
-  b2.increment();
+  return setInterval(() => {
+    i = (i > 3) ? 0 : i;
+    console.clear();
+    console.log(h[i]);
+    i++;
+  }, 300);
+}());
 
-  // set limit
-  if (b2.value >= b2.getTotal()) {
-    // stop timer
-    clearInterval(timer);
-
-    b2.stop();
-  }
-}, 50);
 // Add a response interceptor
 instance.interceptors.request.use((config) => {
-  timer;
+  loading;
   return config;
 });
 instance.interceptors.response.use((res) => {
-  b2.update(100);
-  clearInterval(timer);
+  clearInterval(loading);
   return res;
 });
 
