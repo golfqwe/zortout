@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     imageList: DataTypes.STRING,
     weight: DataTypes.STRING,
     height: DataTypes.STRING,
+    length: DataTypes.STRING,
     width: DataTypes.STRING,
     categoryid: DataTypes.STRING,
     category: DataTypes.STRING,

@@ -22,6 +22,7 @@ const calculatePagesCount = (pageSize, totalCount) =>
 const getOrder = async () => {
   const pageSize = 500;
   let pagesCount = 1;
+  console.clear();
   try {
     for (let page = 1; page <= pagesCount; page++) {
       const { data } = await instance.get(`Order/GetOrders?limit=${pageSize}&page=${page}`);
@@ -29,7 +30,7 @@ const getOrder = async () => {
       b2.start(data.list.length, 0);
 
       pagesCount = calculatePagesCount(pageSize, data.count);
-      console.log(`🚀 call api page => ${page} / ${pagesCount}`);
+      console.log(`\n🚀 call api page => ${page} / ${pagesCount}`);
       let index = 0;
       for (const order of data.list) {
         index += 1;
@@ -63,7 +64,7 @@ const getOrder = async () => {
           }
         });
 
-        b2.update(Math.floor((index * data.list.length) + 1));
+        b2.update(index);
       }
     }
 

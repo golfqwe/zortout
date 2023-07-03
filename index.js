@@ -11,10 +11,10 @@ try {
   console.log(`Failed to sync db: ${error.message}`);
 }
 
-// getProduct();
+getProduct();
 getOrder();
 
-// setInterval(() => {
-//   getProduct();
-//   getOrder();
-// }, 1000 * 60 * 20); // 20 minutes
+setInterval(() => {
+  getProduct();
+  getOrder();
+}, 1000 * 60 * 60 * 6); // 6 house
