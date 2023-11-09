@@ -1,9 +1,8 @@
 require('dotenv').config();
-// const { getOrder, createWorkerOrder } = require('./app/controllers/order');
 const {
   Worker, isMainThread,
 } = require('worker_threads');
-// const getOrder = require('./app/controllers/getOrder');
+const { getProduct } = require('./app/controllers/product');
 
 const instance = require('./app/api/api_instance');
 const db = require('./app/models');
@@ -16,19 +15,12 @@ try {
   console.log(`Failed to sync db: ${error.message}`);
 }
 
-// getProduct();
-// getOrder();
-
-// setInterval(() => {
-//   getProduct();
-//   getOrder();
-// }, 1000 * 60 * 60 * 6); // 6 house
 const calculatePagesCount = (pageSize, totalCount) => (totalCount < pageSize ? 1 : Math.ceil(totalCount / pageSize));
 
 async function createWorkerOrder() {
   if (isMainThread) {
   // This is the main thread
-
+    console.log('\u{1F6A9} Worker thread Order has Create.');
     // Create a worker thread
     const pageLimit = 500;
 
@@ -44,7 +36,7 @@ async function createWorkerOrder() {
     const workerThreads = [];
 
     apiUrls.forEach((uri) => {
-      const worker = new Worker('./app/controllers/worker.js', {
+      const worker = new Worker('./app/controllers/workerOrder.js', {
         workerData: { url: uri },
       });
 
@@ -53,6 +45,9 @@ async function createWorkerOrder() {
       worker.on('exit', () => {
         console.log('Worker thread has finished.');
       });
+      worker.on('error', (error) => {
+        console.error('\u{274C} ', error);
+      });
       worker.on('message', (message) => {
         console.log(`URL ${message.url}: ${message.data}`);
       });
@@ -60,4 +55,46 @@ async function createWorkerOrder() {
   }
 }
 
-createWorkerOrder();
+async function createWorkerReturnOrder() {
+  if (isMainThread) {
+  // This is the main thread
+    console.log('\u{1F6A9} Worker thread Return Order has Create.');
+    // Create a worker thread
+    const pageLimit = 500;
+
+    const { data } = await instance.get('ReturnOrder/GetReturnOrders?limit=1');
+
+    const pagesCount = calculatePagesCount(pageLimit, data.count);
+    // Define the API URLs you want to call
+    const apiUrls = [];
+
+    for (let index = 1; index <= pagesCount; index += 1) {
+      apiUrls.push(`ReturnOrder/GetReturnOrders?limit=${pageLimit}&page=${index}`);
+    }
+    const workerThreads = [];
+
+    apiUrls.forEach((uri) => {
+      const worker = new Worker('./app/controllers/workerReturnOrder.js', {
+        workerData: { url: uri },
+      });
+
+      workerThreads.push(worker);
+
+      worker.on('exit', () => {
+        console.log('Worker thread has finished.');
+      });
+      worker.on('error', (error) => {
+        console.error('\u{274C} ', error);
+      });
+      worker.on('message', (message) => {
+        console.log(`URL ${message.url}: ${message.data}`);
+      });
+    });
+  }
+}
+
+setInterval(() => {
+  getProduct();
+  createWorkerReturnOrder();
+  createWorkerOrder();
+}, 1000 * 60 * 60 * 6); // 6 house

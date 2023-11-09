@@ -27,5 +27,6 @@ db.order = require('./order')(sequelize, Sequelize);
 db.orderItems = require('./orderItems')(sequelize, Sequelize);
 db.payment = require('./payment')(sequelize, Sequelize);
 db.product = require('./product')(sequelize, Sequelize);
+db.returnOrder = require('./returnOrder')(sequelize, Sequelize);
 
 module.exports = db;

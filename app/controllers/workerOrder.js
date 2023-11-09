@@ -18,8 +18,16 @@ async function fetchDataFromAPI() {
       await db.sequelize.transaction(async (t) => {
         const orderData = {
           ...order,
+          amount: parseFloat(order.amount || 0).toFixed(2),
+          vatamount: parseFloat(order.vatamount || 0).toFixed(2),
+          paymentamount: parseFloat(order.paymentamount || 0).toFixed(2),
+          platformdiscount: parseFloat(order.platformdiscount || 0).toFixed(2),
+          sellerdiscount: parseFloat(order.sellerdiscount || 0).toFixed(2),
+          shippingdiscount: parseFloat(order.shippingdiscount || 0).toFixed(2),
+          discountamount: parseFloat(order.discountamount || 0).toFixed(2),
+          voucheramount: parseFloat(order.voucheramount || 0).toFixed(2),
+          totalproductamount: parseFloat(order.totalproductamount || 0).toFixed(2),
           discount: Number(order.discount),
-          shippingdiscount: Number(order.shippingdiscount),
           agent: JSON.stringify(order.agent),
         };
         delete orderData.list;
@@ -46,6 +54,7 @@ async function fetchDataFromAPI() {
           const orderItems = order.list.map((it) => ({
             orderId: order.id,
             ...it,
+            totalprice: parseFloat(it.totalprice || 0).toFixed(2),
             discount: Number(it.discount),
             shippingdiscount: Number(it.shippingdiscount),
           }));
