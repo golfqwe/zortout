@@ -29,16 +29,19 @@ const getProduct = async () => {
         });
 
         if (foundProduct) {
-          await ProductModel.update({ status: { ...product, imageList: product.imageList.toString() } }, {
-            where: {
-              id: product.id,
+          await ProductModel.update(
+            { status: { ...product, imageList: product.imageList.toString() } },
+            {
+              where: {
+                id: product.id,
+              },
+              transaction: t,
             },
-            transaction: t,
-          });
+          );
         }
       });
 
-      b2.update(Math.floor((index * data.list.length) + 1));
+      b2.update(Math.floor(index * data.list.length + 1));
     }
     b2.stop();
     console.log('\x1b[33m Insert product success fully! \x1b[0m');
