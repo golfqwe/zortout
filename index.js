@@ -24,14 +24,14 @@ async function createWorkerOrder() {
     // Create a worker thread
     const pageLimit = 500;
 
-    const { data } = await instance.get('Order/GetOrders?limit=1');
+    const { data } = await instance.get('Order/GetOrders?limit=1&status=1&orderdateafter=2023-10-25');
 
     const pagesCount = calculatePagesCount(pageLimit, data.count);
     // Define the API URLs you want to call
     const apiUrls = [];
 
     for (let index = 1; index <= pagesCount; index += 1) {
-      apiUrls.push(`Order/GetOrders?limit=${pageLimit}&page=${index}`);
+      apiUrls.push(`Order/GetOrders?limit=${pageLimit}&page=${index}&status=1&orderdateafter=2023-10-25`);
     }
     const workerThreads = [];
 
@@ -92,6 +92,10 @@ async function createWorkerReturnOrder() {
     });
   }
 }
+
+getProduct();
+createWorkerReturnOrder();
+createWorkerOrder();
 
 setInterval(() => {
   getProduct();
