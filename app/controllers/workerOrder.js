@@ -27,8 +27,10 @@ async function fetchDataFromAPI() {
           discountamount: parseFloat(order.discountamount || 0).toFixed(2),
           voucheramount: parseFloat(order.voucheramount || 0).toFixed(2),
           totalproductamount: parseFloat(order.totalproductamount || 0).toFixed(2),
-          discount: Number(order.discount),
+          discount: order.discount ? parseInt(order.discount.toString().replace(/\,/g, ''), 10) : 0,
           agent: JSON.stringify(order.agent),
+          orderdate: order.shippingdate,
+          orderdateString: order.shippingdateString,
         };
         delete orderData.list;
         delete orderData.payments;
