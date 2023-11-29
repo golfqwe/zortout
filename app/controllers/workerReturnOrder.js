@@ -6,6 +6,8 @@ const instance = require('../api/api_instance');
 const db = require('../models');
 
 const returnOrderModel = db.returnOrder;
+const paymentReturnModel = db.paymentReturn;
+const productReturnModel = db.productReturn;
 
 async function fetchDataFromAPI() {
   try {
@@ -25,7 +27,7 @@ async function fetchDataFromAPI() {
         delete orderData.tag;
         delete orderData.trackingList;
 
-        const [foundOrder] = await returnOrderModel.findOrCreate({
+        const [foundOrder, created] = await returnOrderModel.findOrCreate({
           where: { id: order.id },
           defaults: orderData,
           transaction: t,
@@ -38,6 +40,17 @@ async function fetchDataFromAPI() {
             },
             transaction: t,
           });
+        }
+
+        if (created) {
+          const orderItems = order.list.map((it) => ({
+            orderId: order.id,
+            ...it,
+            totalprice: parseFloat(it.totalprice || 0).toFixed(2),
+          }));
+          await productReturnModel.bulkCreate(orderItems, { transaction: t });
+
+          await paymentReturnModel.bulkCreate(order.payments, { transaction: t });
         }
       });
     });

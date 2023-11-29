@@ -93,9 +93,9 @@ async function createWorkerReturnOrder() {
   }
 }
 
-getProduct();
+// getProduct();
 createWorkerReturnOrder();
-createWorkerOrder();
+// createWorkerOrder();
 
 setInterval(() => {
   getProduct();
